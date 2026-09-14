@@ -150,7 +150,11 @@ async function retrieveChildren(blockId: string, depth: number): Promise<NotionB
   } while (cursor);
 
   for (const block of blocks) {
-    if (block.has_children) block.children = await retrieveChildren(block.id, depth + 1);
+    // A child_page is a link to another page. Loading it recursively here would
+    // download the entire archive before the current page can render.
+    if (block.has_children && block.type !== "child_page" && block.type !== "child_database") {
+      block.children = await retrieveChildren(block.id, depth + 1);
+    }
   }
   return blocks;
 }
