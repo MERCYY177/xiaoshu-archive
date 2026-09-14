@@ -67,7 +67,7 @@ function Block({ block }: { block: NotionBlock }) {
     case "child_page":
       return <a className="notion-child-page" href={`/p/${block.id}`}><span>↗</span>{data.title || "未命名页面"}</a>;
     case "child_database":
-      return <div className="notion-child-page"><span>▦</span>{data.title || "数据库"}</div>;
+      return <a className="notion-child-page" href={`/d/${block.id}`}><span>▦</span>{data.title || "数据库"}</a>;
     case "table":
       return <div className="notion-table-wrap"><table><tbody>{block.children?.map((row) => <TableRow key={row.id} block={row} />)}</tbody></table></div>;
     case "column_list":

@@ -41,6 +41,14 @@ export type NotionPageBundle = {
   blocks: NotionBlock[];
 };
 
+export type NotionDatabaseBundle = {
+  id: string;
+  title: string;
+  icon: string | null;
+  cover: string | null;
+  pages: NotionPageSummary[];
+};
+
 type CacheEntry = { value: unknown; expiresAt: number };
 const memoryCache = new Map<string, CacheEntry>();
 let requestQueue: Promise<void> = Promise.resolve();
@@ -112,6 +120,35 @@ export async function getNotionPage(pageId: string, force = false): Promise<Noti
   }, CACHE_SECONDS, force);
 }
 
+export async function getNotionDatabase(databaseId: string, force = false): Promise<NotionDatabaseBundle | null> {
+  const id = normalizeId(databaseId);
+  return cached(`notion:database:${id}`, async () => {
+    const database = await notionApi<JsonObject>(`/databases/${id}`);
+    if (database.archived || database.in_trash) return null;
+
+    const dataSources = database.data_sources ?? [];
+    const pages: JsonObject[] = [];
+
+    // New Notion API versions query the data sources contained by a database.
+    // Keep the legacy fallback so existing workspaces continue to work too.
+    if (dataSources.length) {
+      for (const source of dataSources) {
+        pages.push(...await queryCollection(`/data_sources/${normalizeId(source.id)}/query`));
+      }
+    } else {
+      pages.push(...await queryCollection(`/databases/${id}/query`));
+    }
+
+    return {
+      id,
+      title: richPlain(database.title) || "数据库",
+      icon: iconValue(database.icon),
+      cover: fileUrl(database.cover),
+      pages: pages.filter(isVisiblePage).map(toPageSummary),
+    };
+  }, CACHE_SECONDS, force);
+}
+
 export async function clearNotionCache() {
   memoryCache.clear();
   if (!env.DB) return;
@@ -157,6 +194,23 @@ async function retrieveChildren(blockId: string, depth: number): Promise<NotionB
     }
   }
   return blocks;
+}
+
+async function queryCollection(path: string) {
+  const found: JsonObject[] = [];
+  let cursor: string | undefined;
+  do {
+    const result = await notionApi<JsonObject>(path, {
+      method: "POST",
+      body: JSON.stringify({
+        page_size: 100,
+        ...(cursor ? { start_cursor: cursor } : {}),
+      }),
+    });
+    found.push(...(result.results ?? []));
+    cursor = result.has_more ? result.next_cursor ?? undefined : undefined;
+  } while (cursor && found.length < 2000);
+  return found;
 }
 
 async function notionApi<T>(path: string, init: RequestInit = {}): Promise<T> {
