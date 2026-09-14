@@ -34,7 +34,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
         <form action="/api/sync" method="post"><button className="sync-button" type="submit"><RefreshCw size={18} />立即同步 Notion</button></form>
         <div className="setup-notes">
           <h3>需要配置的变量</h3>
-          <dl><div><dt>NOTION_TOKEN</dt><dd>Notion 内部集成密钥，设置为加密 Secret。</dd></div><div><dt>NOTION_ROOT_PAGE_ID</dt><dd>档案根页面网址中的页面 ID。</dd></div><div><dt>ADMIN_PASSWORD</dt><dd>进入本同步页使用的密码，至少12位。</dd></div></dl>
+          <dl><div><dt>NOTION_TOKEN</dt><dd>Notion 内部集成密钥，设置为加密 Secret。</dd></div><div><dt>NOTION_ROOT_PAGE_ID</dt><dd>已写入网站部署配置，不需要再在 Cloudflare 手动添加。</dd></div><div><dt>ADMIN_PASSWORD</dt><dd>进入本同步页使用的密码，至少12位。</dd></div></dl>
           <h3>Webhook 地址</h3>
           <code>/api/notion/webhook</code>
           {webhookToken ? <><h3>Webhook 验证令牌</h3><p>Notion要求验证订阅时，复制下面这段：</p><code className="token-code">{webhookToken}</code></> : <p>在 Notion 集成后台添加上面的 Webhook 地址后，验证令牌会显示在这里。D1未绑定时，请改用 Cloudflare日志查看令牌。</p>}
