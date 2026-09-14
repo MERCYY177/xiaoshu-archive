@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { env } from "cloudflare:workers";
 
-const NOTION_VERSION = "2025-09-03";
+const NOTION_VERSION = "2026-03-11";
 const CACHE_SECONDS = 5 * 60;
 
 type JsonObject = Record<string, any>;
