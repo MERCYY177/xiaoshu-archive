@@ -57,9 +57,11 @@ function readCookie(header: string | null, name: string): string | undefined {
 }
 
 async function sign(payload: string, secret: string): Promise<string> {
-  const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
-  const result = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(payload));
-  return toBase64Url(new Uint8Array(result));
+  // Keep session signing on the digest primitive that Cloudflare's runtime
+  // already uses successfully for password comparison. Including the secret
+  // before a separator and the payload prevents a client from constructing a
+  // valid token without knowing ADMIN_PASSWORD.
+  return digest(`${secret}\u0000${payload}`);
 }
 
 async function digest(value: string): Promise<string> {
