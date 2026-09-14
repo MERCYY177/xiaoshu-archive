@@ -3,7 +3,11 @@
   "name": "xiaoshu-archive",
   "compatibility_date": "2026-09-13",
   "compatibility_flags": ["nodejs_compat"],
+  "keep_vars": true,
   "main": "vinext/server/fetch-handler",
+  "vars": {
+    "NOTION_ROOT_PAGE_ID": "3d9ba530fc768086b6a8eaa65dbd64d3"
+  },
   "assets": {
     "directory": "dist/client",
     "not_found_handling": "none",
