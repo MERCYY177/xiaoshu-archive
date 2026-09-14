@@ -1,4 +1,4 @@
-import Link from "next/link";
+/* eslint-disable @next/next/no-html-link-for-pages */
 
 export const dynamic = "force-dynamic";
 
@@ -14,7 +14,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
           <button type="submit">登录</button>
         </form>
         {error && <p className="login-error">密码不正确，或管理密码尚未配置。</p>}
-        <Link href="/" className="login-back">返回档案馆</Link>
+        <a href="/" className="login-back">返回档案馆</a>
       </section>
     </main>
   );

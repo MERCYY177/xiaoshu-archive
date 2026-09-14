@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-img-element, @typescript-eslint/no-explicit-any */
-import Link from "next/link";
 import type { ReactNode } from "react";
 import type { NotionBlock, NotionRichText } from "@/lib/notion";
 
@@ -66,7 +65,7 @@ function Block({ block }: { block: NotionBlock }) {
     case "embed":
       return data.url ? <a className="notion-bookmark" href={data.url} target="_blank" rel="noreferrer"><span>{plain(data.caption) || data.url}</span><small>{data.url}</small></a> : null;
     case "child_page":
-      return <Link className="notion-child-page" href={`/p/${block.id}`}><span>↗</span>{data.title || "未命名页面"}</Link>;
+      return <a className="notion-child-page" href={`/p/${block.id}`}><span>↗</span>{data.title || "未命名页面"}</a>;
     case "child_database":
       return <div className="notion-child-page"><span>▦</span>{data.title || "数据库"}</div>;
     case "table":
