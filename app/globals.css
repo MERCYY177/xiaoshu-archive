@@ -42,6 +42,9 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .searchbox { display: flex; align-items: center; gap: 11px; border-bottom: 1px solid #aeb9b5; padding: 12px 2px; color: var(--muted-ink); }
 .searchbox input { width: 100%; border: 0; outline: 0; color: var(--ink); background: transparent; font-family: system-ui, sans-serif; font-size: 16px; }
 .content-section { max-width: 1160px; margin: 0 auto; padding: 26px 24px 90px; }
+.notion-home { max-width: 900px; margin: 0 auto; padding: clamp(28px, 5vw, 56px); border: 1px solid var(--line); border-radius: 22px; background: rgba(255,255,255,.82); box-shadow: 0 14px 40px rgba(37,54,48,.06); }
+.notion-home > :first-child { margin-top: 0; }
+.notion-home > :last-child { margin-bottom: 0; }
 .section-title { display: flex; justify-content: space-between; align-items: center; padding: 0 0 16px; border-bottom: 1px solid var(--line); font-family: system-ui, sans-serif; color: var(--muted-ink); }
 .section-title div { display: flex; align-items: center; gap: 10px; }
 .section-title strong { min-width: 27px; height: 27px; padding: 0 8px; border-radius: 999px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); font-size: 12px; }
